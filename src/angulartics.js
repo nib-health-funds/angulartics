@@ -32,7 +32,8 @@ angular.module('angulartics', [])
       autoTrackVirtualPages: true,
       trackRelativePath: false,
       autoBasePath: false,
-      basePath: ''
+      basePath: '',
+      customBasePath: ''
     },
     eventTracking: {},
     bufferFlushDelay: 1000 // Support only one configuration for buffer flush delay to simplify buffering
@@ -54,7 +55,7 @@ angular.module('angulartics', [])
 
   // General buffering handler
   var bufferedHandler = function(handlerName){
-    return function(){
+    return function(){ 
       if(angulartics.waitForVendorCount){
         if(!cache[handlerName]){ cache[handlerName] = []; }
         cache[handlerName].push(arguments);
@@ -100,6 +101,7 @@ angular.module('angulartics', [])
     firstPageview: function (value) { this.settings.pageTracking.autoTrackFirstPage = value; },
     withBase: function (value) { this.settings.pageTracking.basePath = (value) ? angular.element('base').attr('href').slice(0, -1) : ''; },
     withAutoBase: function (value) { this.settings.pageTracking.autoBasePath = value; },    
+    customBasePath: function (value) { this.settings.pageTracking.customBasePath = value; },
   };
 
   // General function to register plugin handlers. Flushes buffers immediately upon registration according to the specified delay.
@@ -167,6 +169,9 @@ angular.module('angulartics', [])
     }
   }
   if ($analytics.settings.pageTracking.autoTrackVirtualPages) {
+    if ($analytics.settings.pageTracking.customBasePath){
+      $analytics.settings.pageTracking.basePath = $analytics.settings.pageTracking.customBasePath;
+    }
     if ($analytics.settings.pageTracking.autoBasePath) {
       /* Add the full route to the base. */
       $analytics.settings.pageTracking.basePath = $window.location.pathname + "#";
