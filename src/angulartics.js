@@ -169,7 +169,7 @@ angular.module('angulartics', [])
   if ($analytics.settings.pageTracking.autoTrackVirtualPages) {
     if ($analytics.settings.pageTracking.autoBasePath) {
       /* Add the full route to the base. */
-      $analytics.settings.pageTracking.basePath = $window.location.pathname;
+      $analytics.settings.pageTracking.basePath = $window.location.pathname + "#";
     }
     if ($injector.has('$route')) {
       $rootScope.$on('$routeChangeSuccess', function (event, current) {
